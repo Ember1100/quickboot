@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+
+    <springProperty scope="context" name="serverPort" source="server.port" defaultValue="UnknownPort"/>
+    <property name="logback.logdir" value="/www/wwwlogs/quickboot" />
+    <property name="logback.appname" value="quickboot"/>
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [ [%X{TraceId},%X{SpanId}] [%X{UriPath}] [%X{ModuleName}] [%t] [%c{0}:%L] - %msg%n" />
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+                <pattern>
+                    ${log.pattern}
+                </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${logback.dir}/allLog/${logback.appname}.${serverPort}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logback.logdir}/allLog/${logback.appname}.%d{yyyy-MM-dd}.${serverPort}.log.gz</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+                <pattern>
+                    ${log.pattern}
+                </pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <springProfile name="!prod">
+            <appender-ref ref="CONSOLE" />
+        </springProfile>
+    </root>
+
+    <springProfile name="!prod">
+        <logger name="org.springframework" level="warn" />
+        <logger name="org.apache.http" level="warn" />
+        <logger name="org.springframework.web" level="error" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="org.springframework" level="warn" />
+        <logger name="org.apache.http" level="warn" />
+        <logger name="org.springframework.web" level="error" />
+    </springProfile>
+
+</configuration>
