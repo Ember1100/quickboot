@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,19 +17,18 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-@Aspect
-@Configuration//定义一个切面
+//@Aspect
 public class LogRecordAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LogRecordAspect.class);
 
     // 定义切点Pointcut
     @Pointcut("execution(* cc.moreluck.quickboot.controller..*.*(..))")
-    public void excudeService() {
+    public void excuseService() {
     }
 
 
-    @Around("excudeService()")
+    @Around("excuseService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;

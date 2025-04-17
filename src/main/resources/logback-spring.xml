@@ -4,7 +4,7 @@
     <springProperty scope="context" name="serverPort" source="server.port" defaultValue="UnknownPort"/>
     <property name="logback.logdir" value="/www/wwwlogs/quickboot" />
     <property name="logback.appname" value="quickboot"/>
-    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [ [%X{TraceId},%X{SpanId}] [%X{UriPath}] [%X{ModuleName}] [%t] [%c{0}:%L] - %msg%n" />
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%X{TraceId},%X{SpanId}] [%X{UriPath}] [%X{ModuleName}] [%t] [%c{0}:%L] - %msg%n" />
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
                 <pattern>

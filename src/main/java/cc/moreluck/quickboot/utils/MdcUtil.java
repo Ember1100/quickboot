@@ -152,6 +152,9 @@ public class MdcUtil {
         setWebTraceMsg(type,request);
     }
 
+    public static void setWebTraceMsg(HttpServletRequest request) {
+
+    }
 
     /**
      * 获取Map值
