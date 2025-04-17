@@ -1,7 +1,12 @@
 package cc.moreluck.quickboot.config;
 
 
+import com.alibaba.ttl.threadpool.TtlExecutors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.concurrent.*;
 
 /**
  * @Author: huangqi
@@ -9,6 +14,7 @@ import lombok.RequiredArgsConstructor;
  * @Description:
  */
 @RequiredArgsConstructor
+@Configuration
 public class ThreadPoolConfig {
     /**
      * 核心线程数（默认线程数）
@@ -40,5 +46,21 @@ public class ThreadPoolConfig {
      */
     private static final String THREAD_NAME_PREFIX = "boot-thread-pool";
 
+    @Bean("ttlExecutor")
+    public Executor threadPoolExecutor() {
+        ThreadPoolExecutorMdcWrapper threadPoolExecutorMdcWrapper = new ThreadPoolExecutorMdcWrapper(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(QUEUE_CAPACITY));
+        return TtlExecutors.getTtlExecutor(threadPoolExecutorMdcWrapper);
+    }
 
+    @Bean("ttlExecutorService")
+    public ExecutorService ttlExecutorService() {
+        // 创建普通的线程池
+//        ExecutorService originalExecutor = Executors.newFixedThreadPool(10);
+
+        // 包装线程池，支持 TransmittableThreadLocal 的上下文传递
+        ThreadPoolExecutorMdcWrapper threadPoolExecutorMdcWrapper = new ThreadPoolExecutorMdcWrapper(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(QUEUE_CAPACITY));
+        return TtlExecutors.getTtlExecutorService(threadPoolExecutorMdcWrapper);
+    }
 }
